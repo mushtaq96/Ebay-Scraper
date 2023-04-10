@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import requests
@@ -9,7 +10,8 @@ from email.mime.text import MIMEText
 import schedule
 import time
 import threading
-
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 origins = [
@@ -43,9 +45,9 @@ async def get_query(q: str):
 
 
 def send_email(listings):
-    sender = 'germany.962022@gmail.com'
-    receiver = 'mushtaq96smb@gmail.com'
-    password = 'bwnmsdttzmhjddrh'
+    sender = os.environ.get('SENDER_MAIL')
+    password = os.environ.get('SENDER_PASSWORD')  # 'password
+    receiver = os.environ.get('RECEIVER_MAIL')
 
     msg = MIMEMultipart()
     msg['From'] = sender
