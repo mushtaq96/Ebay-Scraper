@@ -1,0 +1,10 @@
+# Ignore development and testing files
+node_modules/
+build/
+coverage/
+*.log
+*.env
+
+# Ignore version control files
+.git/
+.gitignore
