@@ -3,10 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+from emailing.sender import send_email
 import schedule
 import time
 import threading
@@ -14,6 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
+
 origins = [
     "http://localhost",
     "http://localhost:3000",
@@ -40,36 +38,19 @@ async def get_query(q: str):
     # code for checking ebay kleinanzeigen listings and sending email
     global query
     query = q
-    check_for_new_listings()
+    listings = get_listings()
+    if len(listings) > 0:
+        sender = os.environ.get('SENDER_MAIL')
+        password = os.environ.get('SENDER_PASSWORD')
+        receiver = os.environ.get('RECEIVER_MAIL')
+        subject = query + ' New Ebay Listing ACTION NEEDED!'
+        body = 'New listing found. Please check the link or links below: \n' + \
+            '\n'.join(listings)
+        send_email(sender, password, receiver, subject, body)
     return {"message": f"Query received: {query}"}
 
 
-def send_email(listings):
-    sender = os.environ.get('SENDER_MAIL')
-    password = os.environ.get('SENDER_PASSWORD')  # 'password
-    receiver = os.environ.get('RECEIVER_MAIL')
-
-    msg = MIMEMultipart()
-    msg['From'] = sender
-    msg['To'] = receiver
-    msg['Subject'] = query + ' New Ebay Listing ACTION NEEDED!'
-
-    body = 'New listing found. Please check the link or links below: \n' + \
-        '\n'.join(listings)
-    msg.attach(MIMEText(body, 'plain'))
-
-    smtp_server = 'smtp.gmail.com'
-    smtp_port = 587
-    server = smtplib.SMTP(smtp_server, smtp_port)
-    server.starttls()
-    # server.set_debuglevel(1) # show what it’s doing when it sends an email
-    server.login(sender, password)
-    text = msg.as_string()
-    server.sendmail(sender, receiver, text)
-    server.quit()
-
-
-def check_for_new_listings():
+def get_listings():
     global query
     if query == "":
         return
@@ -121,8 +102,7 @@ def check_for_new_listings():
                     # print(href)
                     count = count + 1
 
-    if len(url_list) > 0:
-        send_email(url_list)
+    return url_list
 
 
 def run_schedule():
@@ -132,7 +112,7 @@ def run_schedule():
 
 
 # create a schedule to run every 2 minutes
-schedule.every(2).minutes.do(check_for_new_listings)
+schedule.every(2).minutes.do(get_listings)
 
 # start the schedule in a separate thread
 schedule_thread = threading.Thread(target=run_schedule)
