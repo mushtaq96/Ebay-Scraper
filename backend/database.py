@@ -19,3 +19,13 @@ async def insert_data(query, link):
         INSERT INTO search_results(query, link) VALUES($1, $2)
     ''', query, link)
     await conn.close()
+
+
+async def get_data(query):
+    conn = await asyncpg.connect(user='yourusername', password='yourpassword',
+                                 database='yourdatabase', host='yourhost')
+    rows = await conn.fetch('''
+        SELECT * FROM search_results WHERE query = $1
+    ''', query)
+    await conn.close()
+    return rows
