@@ -15,6 +15,11 @@
 - source venv/bin/activate
 - uvicorn main:app --reload
 
+3. Database
+
+- Default username 'postgres'
+- Adminer: a db management tool with UI
+
 ## Docker
 
 - `docker-compose.yml` file that defines two services: frontend and backend.

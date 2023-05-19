@@ -56,8 +56,8 @@ def get_listings():
         return
     # Fügt die Query in den Ebay-Kleinanzeigen URL ein. / Inserts the query into the Ebay-Kleinanzeigen URL.
     # URL = "https://www.ebay-kleinanzeigen.de/stadt/stuttgart/" + query + "/k0l9280"
-    URL = "https://www.ebay-kleinanzeigen.de/s-zu-verschenken/stuttgart/" + \
-        query + "/k0c192l9280"
+    URL = "https://www.kleinanzeigen.de/s-stuttgart/" + \
+        query + "/k0l9280"
 
     # Setzt die Headers der Anfrage (Den User-Agent), damit Ebay-Kleinanzeigen die Anfrage nicht blockt. / Sets the headers of the request (the User-Agent) so that Ebay-Kleinanzeigen does not block the request.
     headers = {
