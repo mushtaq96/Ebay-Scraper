@@ -1,9 +1,10 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 from bs4 import BeautifulSoup
 from emailing.sender import send_email
+from db.db import get_db_conn, get_links, insert_links, link_exists, create_links_table
 import schedule
 import time
 import threading
@@ -32,13 +33,26 @@ def read_root():
 
 query = ""
 
+@app.on_event("startup")
+async def startup():
+    async with get_db_conn() as conn:
+        await create_links_table(conn)
+
 
 @app.get("/query")
-async def get_query(q: str):
+async def get_query(q: str, conn=Depends(get_db_conn)):
     # code for checking ebay kleinanzeigen listings and sending email
     global query
     query = q
     listings = get_listings()
+    for listing in listings:
+        async with get_db_conn() as conn:
+            if not await link_exists(conn, listing):
+                await insert_links(conn, listing)
+                print(f'New listing found: {listing}')
+            else:
+                #remove listing from list
+                listings.remove(listing)
     if len(listings) > 0:
         sender = os.environ.get('SENDER_MAIL')
         password = os.environ.get('SENDER_PASSWORD')
