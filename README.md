@@ -45,3 +45,5 @@ backend/
         __init__.py
         runner.py
 ```
+
+- Note to self : right now running backend locally and the rest on docker for better debugging experience.
