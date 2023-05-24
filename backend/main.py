@@ -126,7 +126,7 @@ def run_schedule():
 
 
 # create a schedule to run every 2 minutes
-schedule.every(2).minutes.do(get_listings)
+schedule.every(6).hours.do(get_listings)
 
 # start the schedule in a separate thread
 schedule_thread = threading.Thread(target=run_schedule)
