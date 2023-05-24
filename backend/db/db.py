@@ -3,8 +3,8 @@ import asyncpg
 
 @asynccontextmanager
 async def get_db_conn():
-    # conn = await asyncpg.connect('postgresql://postgres:mushtaq96@db/ebay')
-    conn = await asyncpg.connect('postgresql://postgres:mushtaq96@192.168.1.150:5432/ebay')#<windows_host_ip>:5432
+    conn = await asyncpg.connect('postgresql://postgres:mushtaq96@db/ebay')#this is needed when running in docker
+    # conn = await asyncpg.connect('postgresql://postgres:mushtaq96@192.168.1.150:5432/ebay')#<windows_host_ip>:5432
     #db is the name of the container or host
     try:
         yield conn
