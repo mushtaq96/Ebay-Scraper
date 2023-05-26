@@ -1,0 +1,43 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  # Update these variables with your own values
+  dockerComposeFile: './docker-compose.yml'
+  dockerRegistryServiceConnection: 'mushtaq96'#serviceConnectionName
+  imageRepository: 'frontend,backend'#imageName
+  containerRegistry: 'mushtaq96.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)'
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DockerCompose@0
+      displayName: Build services
+      inputs:
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscriptionEndpoint: $(dockerRegistryServiceConnection)
+        azureContainerRegistry: $(containerRegistry)
+        dockerComposeFile: $(dockerComposeFile)
+        action: 'Build services'
+        additionalImageTags: $(tag)
+
+    - task: DockerCompose@0
+      displayName: Push services
+      inputs:
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscriptionEndpoint: $(dockerRegistryServiceConnection)
+        azureContainerRegistry: $(containerRegistry)
+        dockerComposeFile: $(dockerComposeFile)
+        action: 'Push services'
+        additionalImageTags: $(tag)
