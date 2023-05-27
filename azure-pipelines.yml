@@ -7,7 +7,7 @@ resources:
 variables:
   # Update these variables with your own values
   dockerComposeFile: './docker-compose.yml'
-  dockerRegistryServiceConnection: 'mushtaq96'#serviceConnectionName
+  dockerRegistryServiceConnection: 'serviceconnection'#serviceConnectionName
   imageRepository: 'frontend,backend'#imageName
   containerRegistry: 'mushtaq96.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)'
