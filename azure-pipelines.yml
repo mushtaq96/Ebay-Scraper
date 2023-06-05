@@ -5,15 +5,19 @@ resources:
 - repo: self
 
 variables:
-  - group: EbayScraperEnvVariables
-  # Update these variables with your own values
-  dockerComposeFile: './docker-compose.yml'
-  dockerRegistryServiceConnection: 'serviceconnection'#serviceConnectionName
-  imageRepository: 'frontend,backend'#imageName
-  containerRegistry: 'mushtaq96.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)'
-  tag: '$(Build.BuildId)'
-
+- group: EbayScraperEnvVariables
+- name: dockerComposeFile
+  value: './docker-compose.yml'
+- name: dockerRegistryServiceConnection
+  value: 'serviceconnection' # Update with your service connection name
+- name: imageRepository
+  value: 'frontend,backend' # Update with your image repository names
+- name: containerRegistry
+  value: 'mushtaq96.azurecr.io' # Update with your container registry
+- name: dockerfilePath
+  value: '$(Build.SourcesDirectory)'
+- name: tag
+  value: '$(Build.BuildId)'
 
 stages:
 - stage: Build
