@@ -5,7 +5,7 @@ resources:
 - repo: self
 
 variables:
-- group: EbayScraperEnvVariables
+  - group: EbayScraperEnvVariables
   # Update these variables with your own values
   dockerComposeFile: './docker-compose.yml'
   dockerRegistryServiceConnection: 'serviceconnection'#serviceConnectionName
