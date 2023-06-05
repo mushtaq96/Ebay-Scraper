@@ -9,7 +9,7 @@ variables:
 - name: dockerComposeFile
   value: './docker-compose.yml'
 - name: dockerRegistryServiceConnection
-  value: 'serviceconnection' # Update with your service connection name
+  value: 'mushtaq96' # Update with your service connection name
 - name: imageRepository
   value: 'frontend,backend' # Update with your image repository names
 - name: containerRegistry
