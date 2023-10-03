@@ -104,7 +104,7 @@ def get_listings():
     baseURL = 'https://www.ebay-kleinanzeigen.de'
     result = soup.find_all('ul', {'id': 'srchrslt-adtable'})
     for ul in result:
-        li_elements = ul.find_all('li', {'class': 'ad-listitem lazyload-item'})
+        li_elements = ul.find_all('li', {'class': 'ad-listitem'})
         # print(li_elements)
         for li in li_elements:
             link = li.find('a')
@@ -126,7 +126,7 @@ def run_schedule():
 
 
 # create a schedule to run every 2 minutes
-schedule.every(6).hours.do(get_listings)
+schedule.every(2).minutes.do(get_listings)
 
 # start the schedule in a separate thread
 schedule_thread = threading.Thread(target=run_schedule)
