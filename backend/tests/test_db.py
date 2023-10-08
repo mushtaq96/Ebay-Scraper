@@ -18,3 +18,14 @@ async def test_get_db_conn():
         # If get_db_conn is working correctly, it should return a connection object, which is not None
         # If conn is None, then the assert statement will fail, and pytest will know that our test has failed
         assert conn is not None
+
+
+@pytest.mark.asyncio
+async def test_create_links_table():
+    async with get_db_conn() as conn:
+        # We call the create_links_table function and pass the connection to it
+        await create_links_table(conn)
+        # After creating the table, we try to fetch from it to see if it exists
+        result = await conn.fetch('SELECT * FROM links')
+        # If the table doesn't exist, an error will be thrown and the test will fail
+        assert result is not None
