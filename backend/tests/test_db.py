@@ -2,7 +2,7 @@
 import pytest
 
 # Here we're importing the get_db_conn function from the db module in the backend.db package
-from backend.db.db import create_links_table, get_db_conn
+from backend.db.db import create_links_table, get_db_conn, insert_links
 
 # The pytest.mark.asyncio decorator is used to mark a test function as a coroutine
 # It tells pytest to handle this function asynchronously
@@ -29,3 +29,15 @@ async def test_create_links_table():
         result = await conn.fetch('SELECT * FROM links')
         # If the table doesn't exist, an error will be thrown and the test will fail
         assert result is not None
+
+
+@pytest.mark.asyncio
+async def test_insert_links():
+    url = 'https://www.example.com'
+    async with get_db_conn() as conn:
+        # We call the insert_links function and pass the connection and a URL to it
+        await insert_links(conn, url)
+        # After inserting the link, we fetch from the table where URL is the one we inserted
+        result = await conn.fetch('SELECT * FROM links WHERE url = $1', url)
+        # If the URL doesn't exist in the table, then our insert_links function didn't work correctly and the test will fail
+        assert len(result) > 0
