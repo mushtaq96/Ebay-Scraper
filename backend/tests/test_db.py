@@ -50,3 +50,13 @@ async def test_get_links():
         links = await get_links(conn)
         # If get_links is working correctly, it should return a list of links. If it doesn't, then our test will fail.
         assert links is not None
+
+
+@pytest.mark.asyncio
+async def test_link_exists():
+    url = 'https://www.example.com'
+    async with get_db_conn() as conn:
+        # We call the link_exists function and pass the connection and a URL to it
+        exists = await link_exists(conn, url)
+        # If link_exists is working correctly, it should return True if the URL exists in the table. If it doesn't return True, then our test will fail.
+        assert exists == True
