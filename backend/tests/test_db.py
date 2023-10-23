@@ -2,7 +2,7 @@
 import pytest
 
 # Here we're importing the get_db_conn function from the db module in the backend.db package
-from backend.db.db import create_links_table, get_db_conn, get_links, insert_links
+from backend.db.db import create_links_table, get_db_conn, get_links, insert_links, link_exists
 
 # The pytest.mark.asyncio decorator is used to mark a test function as a coroutine
 # It tells pytest to handle this function asynchronously
